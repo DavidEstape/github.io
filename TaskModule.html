@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Task Module - Hello World</title>
+    <script src="https://statics.teams.microsoft.com/sdk/v1.12.0/js/MicrosoftTeams.min.js"></script>
+</head>
+<body>
+    <h1>Hello from Task Module!</h1>
+    <p>This is a simple "Hello World" Task Module.</p>
+
+    <button id="submitButton">Submit</button>
+    <button id="cancelButton">Cancel</button>
+
+    <script>
+        microsoftTeams.initialize();
+
+        document.getElementById('submitButton').addEventListener('click', function () {
+            // Construct the result object
+            const result = {
+                message: "Hello World! Task Module Completed."
+            };
+
+            // Submit the result to the bot
+            microsoftTeams.tasks.submitTask(result);
+        });
+
+        document.getElementById('cancelButton').addEventListener('click', function () {
+            // Cancel the task module
+            microsoftTeams.tasks.cancelTask();
+        });
+    </script>
+</body>
+</html>
