@@ -29,10 +29,18 @@
 </head>
 <body>
   <div id="teamsContent" style="display: none;">
-    <h1>Hello from Task Module!</h1>
-    <p>This content is shown inside Microsoft Teams.</p>
-    <button id="submitButton">Submit</button>
-    <button id="cancelButton">Cancel</button>
+    <h2>Formulario de ejemplo</h2>
+    <!-- Formulario con campos de entrada -->
+    <form id="customerForm" onsubmit="return sendForm();">
+      <label for="nombre">Nombre:</label><br/>
+      <input type="text" id="nombre" name="nombre" required /><br/><br/>
+      
+      <label for="email">Email:</label><br/>
+      <input type="email" id="email" name="email" required /><br/><br/>
+      
+      <button type="submit">Enviar</button>
+      <button type="button" id="cancelButton">Cancelar</button>
+    </form>
   </div>
 
   <div id="nonTeamsContent" style="display: none;">
@@ -41,19 +49,31 @@
   </div>
 
   <script>
-    window.onload = function () {
+    function sendForm() {
+      const nombre = document.getElementById('nombre').value;
+      const email = document.getElementById('email').value;
+      
+      const formData = {
+        name: nombre,
+        email: email
+      };
+      
+      microsoftTeams.tasks.submitTask(formData);
+      /* 📌 Nota: En versiones recientes del SDK de Teams, se recomienda pasar 
+         también el AppId de la aplicación como segundo parámetro para validar 
+         la procedencia (por ejemplo: 
+         microsoftTeams.tasks.submitTask(datosFormulario, "<ID_DE_LA_APP>")). 
+         Esto asegura que la app que envía el resultado es la misma que abrió el diálogo:contentReference[oaicite:0]{index=0}. */
+      
+      return false;
+    }
+
+    window.onload = () => {
       microsoftTeams.app.initialize().then(() => {
         // We are in Teams
         document.getElementById("teamsContent").style.display = "block";
 
-        document.getElementById("submitButton").addEventListener("click", function () {
-          const result = {
-            message: "Hello World! Task Module Completed."
-          };
-          microsoftTeams.tasks.submitTask(result);
-        });
-
-        document.getElementById("cancelButton").addEventListener("click", function () {
+        document.getElementById("cancelButton").addEventListener("click", () => {
           microsoftTeams.tasks.cancelTask();
         });
 
